@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nuty i tabulatura</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231d2733'/%3E%3Cpath d='M6 11h20M6 16h20M6 21h20' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='12' cy='16' r='3' fill='%235a63e6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="bar">
+    <h1 class="visually-hidden">Nuty i tabulatura</h1>
+    <div class="songbar">
+      <select id="song" aria-label="Utwór"></select>
+      <button type="button" id="newSong">Nowy utwór</button>
+      <span class="save-state" id="saveState" role="status"></span>
+      <span class="page-info" id="pageInfo" aria-live="polite"></span>
+    </div>
+
+    <div class="seg" role="radiogroup" aria-label="Widok">
+      <button type="button" role="radio" data-view="scoretab" aria-checked="true">Nuty + tab</button>
+      <button type="button" role="radio" data-view="tab" aria-checked="false">Tylko tab</button>
+      <button type="button" role="radio" data-view="score" aria-checked="false">Tylko nuty</button>
+    </div>
+
+    <label class="field">
+      <span>Takty w wierszu</span>
+      <select id="bars">
+        <option value="0">Automatycznie</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+    </label>
+
+    <div class="zoom" role="group" aria-label="Rozmiar">
+      <button type="button" id="zoomOut" aria-label="Zmniejsz">−</button>
+      <output id="zoomValue">100%</output>
+      <button type="button" id="zoomIn" aria-label="Powiększ">+</button>
+    </div>
+
+    <span class="spacer"></span>
+
+    <button type="button" id="showButton" aria-expanded="false" aria-controls="showPanel">Pokaż</button>
+    <button type="button" id="sizesButton" aria-expanded="false" aria-controls="sizesPanel">Rozmiary</button>
+    <button type="button" id="toggleCardEdit" aria-pressed="true">Edycja na karcie</button>
+    <button type="button" id="toggleEditor" aria-expanded="true" aria-controls="editor">Edytor</button>
+    <button type="button" id="openFile">Otwórz plik</button>
+    <button type="button" id="copyPrompt">Skopiuj prompt dla LLM</button>
+    <button type="button" id="printDuplex" title="Na odwrocie każdej kartki drukuje się sama tabulatura. W oknie drukowania włącz druk dwustronny.">Druk dwustronny</button>
+    <button type="button" id="print" class="primary">Drukuj</button>
+    <input type="file" id="file" hidden accept=".alphatex,.txt,.gp,.gp3,.gp4,.gp5,.gpx,.gp7,.musicxml,.xml,.mxl">
+  </header>
+
+  <main class="layout">
+    <aside class="editor" id="editor">
+      <label class="editor-label" for="source">Zapis AlphaTex</label>
+      <textarea id="source" spellcheck="false" autocomplete="off" autocapitalize="off"
+        placeholder="Wklej tutaj kod AlphaTex albo napisz go ręcznie. Prompt dla LLM skopiujesz przyciskiem u góry."></textarea>
+      <p class="status" id="status" role="status"></p>
+    </aside>
+
+    <section class="desk" id="desk">
+      <div class="tools" id="tools" role="toolbar" aria-label="Edycja na karcie">
+        <div class="tool-group" role="radiogroup" aria-label="Wartość nuty">
+          <button type="button" role="radio" data-dur="1" aria-checked="false" title="Cała nuta">1</button>
+          <button type="button" role="radio" data-dur="2" aria-checked="false" title="Półnuta">1/2</button>
+          <button type="button" role="radio" data-dur="4" aria-checked="true" title="Ćwierćnuta">1/4</button>
+          <button type="button" role="radio" data-dur="8" aria-checked="false" title="Ósemka">1/8</button>
+          <button type="button" role="radio" data-dur="16" aria-checked="false" title="Szesnastka">1/16</button>
+        </div>
+        <button type="button" id="toolDot" aria-pressed="false" title="Wydłuża nutę o połowę">Kropka</button>
+        <button type="button" id="toolRest" aria-pressed="false" title="Kliknięcie wstawia pauzę zamiast nuty">Pauza</button>
+        <span class="tool-sep"></span>
+        <button type="button" id="toolDelete" title="Usuwa zaznaczoną nutę (Delete)">Usuń</button>
+        <button type="button" id="toolUndo" title="Cofnij (Ctrl+Z)">Cofnij</button>
+        <button type="button" id="toolRedo" title="Ponów (Ctrl+Shift+Z)">Ponów</button>
+        <p class="tools-hint" id="toolsHint">Kliknij linię tabulatury, żeby wstawić nutę. Kliknij nutę, żeby ją zaznaczyć: cyfry zmieniają próg, strzałki przesuwają.</p>
+      </div>
+      <div class="sheet">
+        <div class="page" id="page">
+          <div id="alphaTab"></div>
+          <div class="overlay" id="overlay" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="showPanel" class="panel" aria-labelledby="showTitle">
+    <h2 id="showTitle">Pokaż na karcie</h2>
+    <label class="check"><input type="checkbox" data-show="title"><span>Tytuł i podtytuł</span></label>
+    <label class="check"><input type="checkbox" data-show="tempo"><span>Tempo</span></label>
+    <label class="check"><input type="checkbox" data-show="chordNames"><span>Nazwy akordów nad nutami</span></label>
+    <label class="check"><input type="checkbox" data-show="chordDiagrams"><span>Diagramy akordów</span></label>
+    <label class="check"><input type="checkbox" data-show="markers"><span>Nazwy części (np. Refren)</span></label>
+    <label class="check"><input type="checkbox" data-show="barNumbers"><span>Numery taktów</span></label>
+    <div class="check-row">
+      <label class="check"><input type="checkbox" id="showLetters"><span>Litery nut</span></label>
+      <select id="namesStyle" aria-label="Nazwy liter">
+        <option value="pl">C D E F G A H</option>
+        <option value="en">C D E F G A B</option>
+      </select>
+    </div>
+    <label class="check"><input type="checkbox" id="showWords"><span>Słowa piosenki</span></label>
+    <div class="check-row">
+      <span>Poza tabulaturą</span>
+      <select id="toneSelect" aria-label="Kolor wszystkiego poza tabulaturą">
+        <option value="black">Czarne</option>
+        <option value="soft">Lekko szare</option>
+        <option value="gray">Szare</option>
+      </select>
+    </div>
+    <p class="panel-hint">Ukrywa tylko wyświetlanie na karcie i wydruku. Zapis utworu zostaje bez zmian.</p>
+    <div class="panel-actions">
+      <button type="button" id="showAll">Pokaż wszystko</button>
+      <button type="button" id="showClose" class="primary">Gotowe</button>
+    </div>
+  </dialog>
+
+  <dialog id="sizesPanel" class="panel" aria-labelledby="sizesTitle">
+    <h2 id="sizesTitle">Rozmiary</h2>
+    <label>
+      <span>Nuty i pięciolinia</span>
+      <input id="sizeScale" type="range" min="50" max="200" step="5">
+      <output></output>
+    </label>
+    <label>
+      <span>Litery nut</span>
+      <input id="sizeLetters" type="range" min="8" max="24" step="1">
+      <output></output>
+    </label>
+    <label>
+      <span>Słowa piosenki</span>
+      <input id="sizeWords" type="range" min="9" max="26" step="1">
+      <output></output>
+    </label>
+    <label>
+      <span>Nazwy akordów</span>
+      <input id="sizeChords" type="range" min="8" max="24" step="1">
+      <output></output>
+    </label>
+    <label>
+      <span>Tytuł</span>
+      <input id="sizeTitle" type="range" min="18" max="56" step="1">
+      <output></output>
+    </label>
+    <label>
+      <span>Odstęp pięciolinia–tabulatura</span>
+      <input id="sizeGap" type="range" min="0" max="48" step="1">
+      <output></output>
+    </label>
+    <label>
+      <span>Systemów na stronie</span>
+      <select id="sizeSystems">
+        <option value="0">Tyle, ile się zmieści</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="8">8</option>
+      </select>
+    </label>
+    <p class="panel-hint">Karta ma szerokość pola druku na kartce A4, więc wydruk wygląda tak jak podgląd. Linia przerywana pokazuje, gdzie zaczyna się kolejna strona.</p>
+    <div class="panel-actions">
+      <button type="button" id="sizesReset">Przywróć domyślne</button>
+      <button type="button" id="sizesClose" class="primary">Gotowe</button>
+    </div>
+  </dialog>
+
+  <dialog id="newDialog" aria-labelledby="newDialogTitle">
+    <form method="dialog">
+      <h2 id="newDialogTitle">Nowy utwór</h2>
+      <label>
+        <span>Tytuł</span>
+        <input id="newTitle" type="text" maxlength="80" autocomplete="off" required>
+      </label>
+      <p class="dialog-hint">Utwór zaczyna się od czterech pustych taktów. Kliknij w nie na karcie albo wklej kod AlphaTex w edytorze.</p>
+      <menu>
+        <button value="cancel" formnovalidate>Anuluj</button>
+        <button value="ok" class="primary">Utwórz</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="lib/alphaTab.min.js"></script>
+  <script src="app.js"></script>
+  <script src="songs.js"></script>
+  <script src="card-edit.js"></script>
+  <script src="start.js"></script>
+</body>
+</html>

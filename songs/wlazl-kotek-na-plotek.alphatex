@@ -1,0 +1,20 @@
+\title "Wlazł kotek na płotek"
+\subtitle "Piosenka ludowa"
+\tempo 100
+\ts 3 4
+\chord ("C" 0 1 0 2 3 x)
+\chord ("G" 3 0 0 0 2 3)
+\lyrics "Wlazł ko- tek na pło- tek i mru- ga ład- na to pio- sen- ka nie- dłu- ga Nie- dłu- ga nie krót- ka lecz w+sam raz Zaś- pie- waj ko- te- czku je- szcze raz"
+.
+3.1.4{ch "C"} 0.1.4 0.1.4 |
+1.1.4{ch "G"} 3.2.4 3.2.4 |
+1.2.8{ch "C"} 0.1.8 3.1.2 |
+3.1.4{ch "C"} 0.1.4 0.1.4 |
+1.1.4{ch "G"} 3.2.4 3.2.4 |
+1.2.8{ch "C"} 0.1.8 1.2.2 |
+(3.1).4{ch "C"} 0.1.4 0.1.4 |
+1.1.4{ch "G"} (3.2) (3.2) |
+1.2.8{ch "C"} 0.1.8 3.1.2 |
+3.1.4{ch "C"} 0.1.4 0.1.4 |
+1.1.4{ch "G"} 3.2.4 3.2.4 |
+1.2.8{ch "C"} 0.1.8 1.2.2

@@ -1,0 +1,14 @@
+{
+  "name": "tab-generator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Podgląd i druk nut oraz tabulatur gitarowych z zapisu AlphaTex",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@coderline/alphatab": "^1.9.0",
+    "@fontsource/jetbrains-mono": "^5.2.0",
+    "@fontsource/schibsted-grotesk": "^5.2.0"
+  }
+}

@@ -1,0 +1,37 @@
+\title "Cicha noc"
+\subtitle "Kolęda"
+\tempo 90
+\ts 3 4
+\chord ("G" 3 0 0 0 2 3)
+\chord ("C" 0 1 0 2 3 x)
+\chord ("D7" 2 1 2 0 x x)
+\lyrics "Ci- i- cha noc, świę- ę- ta noc
+Po- kój niesie lu- dziom wszem,
+A u żłó- ó- bka Ma- a- tka święta
+Czu- wa sa- a- ma, u- u- śmiech- nięta,
+Nad Dzie- cią- ą- tka sne- em,
+Na- ad Dzie- cią- ą- tka snem."
+.
+3.2.4{d ch "G"} 0.1.8 3.2.4 |
+0.2.2{d ch "G"} |
+3.2.4{d ch "G"} 0.1.8 3.2.4 |
+0.2.2{d ch "G"} |
+5.1.2{ch "D7"} 5.1.4 |
+2.1.2{d ch "D7"} |
+3.1.2{ch "G"} 3.1.4 |
+3.2.2{d ch "G"} |
+0.1.2{ch "C"} 0.1.4 |
+3.1.4{d ch "C"} 2.1.8 0.1.4 |
+3.2.4{d ch "G"} 0.1.8 3.2.4 |
+0.2.2{d ch "G"} |
+0.1.2{ch "C"} 0.1.4 |
+3.1.4{d ch "C"} 2.1.8 0.1.4 |
+3.2.4{d ch "G"} 0.1.8 3.2.4 |
+0.2.2{d ch "G"} |
+5.1.2{ch "D7"} 5.1.4 |
+8.1.4{d ch "D7"} 5.1.8 2.1.4 |
+3.1.2{d ch "G"} |
+7.1.2{d ch "G"} |
+3.1.4{ch "G"} 3.2.4 0.2.4 |
+3.2.4{d ch "D7"} 1.2.8 2.3.4 |
+0.3.2{d ch "G"}

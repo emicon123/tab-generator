@@ -1,0 +1,26 @@
+\title "Sto lat"
+\subtitle "Piosenka ludowa"
+\tempo 100
+\ts 2 4
+\ks G
+\chord ("G" 3 0 0 0 2 3)
+\chord ("D" 2 3 2 0 x x)
+\chord ("C" 0 1 0 2 3 x)
+\lyrics "Sto lat sto lat niech ży- je ży- je nam sto lat sto lat niech ży- je ży- je nam jesz- cze raz jesz- cze raz niech ży- je ży- je nam niech ży- je nam"
+.
+3.2.4{ch "G"} 0.2.4 |
+3.2.4 0.2.4 |
+3.2.4 0.1.8 3.2.8 |
+1.2.8 0.2.8 1.2.4{ch "D"} |
+1.2.4 2.3.4 |
+1.2.4 2.3.4 |
+1.2.4 3.2.8 1.2.8 |
+0.2.8 2.3.8 0.2.4{ch "G"} |
+3.2.8 3.2.8 0.2.4 |
+3.2.8 3.2.8 0.2.4 |
+3.2.4 3.1.8 2.1.8 |
+0.1.8 4.2.8 0.1.4{ch "C"} |
+2.1.2{ch "D"} |
+2.1.4 2.1.4 |
+3.1.2{ch "G"} |
+-.1.4 r.4
