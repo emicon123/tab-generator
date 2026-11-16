@@ -2,7 +2,7 @@
   "name": "tab-generator",
   "version": "1.0.0",
   "private": true,
-  "description": "Podgląd i druk nut oraz tabulatur gitarowych z zapisu AlphaTex",
+  "description": "Print-first preview and printing of sheet music and guitar tablature from AlphaTex",
   "scripts": {
     "start": "node server.mjs"
   },
